@@ -54,8 +54,8 @@ public class BaseInterceptor implements HandlerInterceptor {
                 request.getSession().setAttribute(WebConst.LOGIN_SESSION_KEY, user);
             }
         }
-        if (uri.startsWith("/admin") && !uri.startsWith("/admin/login") && null == user) {
-            response.sendRedirect(request.getContextPath() + "/admin/login");
+        if (uri.startsWith("/blog/admin") && !uri.startsWith("/blog/admin/login") && null == user) {
+            response.sendRedirect("/admin/login");
             return false;
         }
         //设置get请求的token
