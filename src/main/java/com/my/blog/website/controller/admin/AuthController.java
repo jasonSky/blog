@@ -67,6 +67,7 @@ public class AuthController extends BaseController {
         try {
             UserVo user = usersService.login(username, password);
             request.getSession().setAttribute(WebConst.LOGIN_SESSION_KEY, user);
+            System.out.println("sessionId:" + request.getRequestedSessionId());
             if (StringUtils.isNotBlank(remeber_me)) {
                 TaleUtils.setCookie(response, user.getUid());
             }

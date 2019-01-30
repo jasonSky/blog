@@ -166,10 +166,18 @@
      <artifactId>commons-codec</artifactId>
      <version>1.11</version>
  </dependency>
+     <dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-tomcat</artifactId>
+    <!--打包的时候可以不用包进去，别的设施会提供。事实上该依赖理论上可以参与编译，测试，运行等周期。
+        相当于compile，但是打包阶段做了exclude操作-->
+    <scope>provided</scope>
+</dependency>
     </dependencies>
 
     <!-- 普通的maven打包方式 -->
     <build>
+            <finalName>blog</finalName>
             <plugins>
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
