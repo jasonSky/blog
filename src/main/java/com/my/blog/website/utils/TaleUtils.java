@@ -211,6 +211,7 @@ public class TaleUtils {
         if (null == session) {
             return null;
         }
+        System.out.println("logout:" + session.getAttribute(WebConst.LOGIN_SESSION_KEY));
         return (UserVo) session.getAttribute(WebConst.LOGIN_SESSION_KEY);
     }
 

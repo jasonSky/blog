@@ -148,10 +148,10 @@ public class IndexController extends BaseController {
      * @param session
      * @param response
      */
-    @RequestMapping("logout")
-    public void logout(HttpSession session, HttpServletResponse response) {
-        TaleUtils.logout(session, response);
-    }
+    //@RequestMapping("logout")
+    //public void logout(HttpSession session, HttpServletResponse response) {
+    //    TaleUtils.logout(session, response);
+    //}
 
     /**
      * 评论操作

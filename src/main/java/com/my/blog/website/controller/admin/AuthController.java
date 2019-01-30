@@ -94,18 +94,14 @@ public class AuthController extends BaseController {
      * @param session
      * @param response
      */
-    @RequestMapping("/logout")
-    public void logout(HttpSession session, HttpServletResponse response, HttpServletRequest request) {
-        session.removeAttribute(WebConst.LOGIN_SESSION_KEY);
+    @RequestMapping("/logoux")
+    public String logout(HttpServletResponse response, HttpServletRequest request) {
+        //request.getSession().invalidate();
+        request.getSession().removeAttribute(WebConst.LOGIN_SESSION_KEY);
         Cookie cookie = new Cookie(WebConst.USER_IN_COOKIE, "");
         cookie.setMaxAge(0);
+        cookie.setPath("/");
         response.addCookie(cookie);
-        try {
-            //response.sendRedirect(Commons.site_url());
-            response.sendRedirect(Commons.site_login());
-        } catch (IOException e) {
-            e.printStackTrace();
-            LOGGER.error("注销失败", e);
-        }
+        return "admin/login";
     }
 }
