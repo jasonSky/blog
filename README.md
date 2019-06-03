@@ -1,51 +1,54 @@
-## Blog
- 博客首页：
- ![](img/1.png)
+1. /opt/           --blog + withme + survery
+   /home/php/www/  --phpgraphy
+	源文件及项目目录
 
- 关于：
- ![](img/about.png)
- 
- **后台管理**
- 
- 管理登录：
- ![](img/login.png)
- 
- 管理首页：
- ![](img/main.png)
- 
-## 开源协议
+2. /usr/local/nginx  -- nginx
+/usr/local/ngrok  -- nat
+/usr/local/go
+/usr/local/php
+/usr/bin/docker
 
-[MIT](./LICENSE)
+3. /usr/tomcat  -- tomcat
 
-## 感谢
+4. /home/ftpUsers -- ftp
 
-[ZHENFENG13](https://github.com/ZHENFENG13)
-[otale](https://github.com/otale)
+5.  配置文件
+/etc/php.ini
+/etc/shadowsocks.json  --/usr/bin/python /usr/bin/ssserver -c /etc/shadowsocks.json -d start
+/usr/local/nginx/sbin  --./nginx -c /usr/local/nginx/conf/nginx.conf
+/usr/local/ngrok       --nohup ./bin/ngrokd -tlsKey=server.key -tlsCrt=server.crt -domain="jasonsky.com.cn" -httpAddr=":9000" -httpsAddr=":443" &
 
-##部署安装
-1. 新建数据库tale
+6. service开机启动（vsftpd）
+service vsftpd start
+service enable vsftpd
 
-       进入mysql  运行source sql文件来恢复库表
+7. php-fpm(nginx php支持)
+vi /etc/php-fpm.d/www.conf
+service php-fpm restart
 
-2. git下来后在根目录 mvn package
- 
-       拷贝war包到webapps目录下部署即可
+网站(不分先后)
+photo
+php
+info
+blog
+www
 
-3. blog.jasonsky.com.cn 访问前台<br/>
-   blog.jasonsky.com.cn/admin 访问后台 默认账号admin/123456  如果登录不了请修改数据库中t_user数据即可 密码是md5加密
 
-       需要通过域名访问时
-       配置Nginx{proxy_cookie_path 以免session取不到的问题} 
-       
-            server {
-                 listen 80;
-                 server_name blog.jasonsky.com.cn;
-                 location / {
-                         proxy_pass http://localhost:8080/blog/;
-                         proxy_cookie_path  /blog      /;
-                         proxy_set_header Host $host;
-                         proxy_set_header X-Real-IP $remote_addr;
-                         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-                 }
-             }
+python3: 
+编译安装 configure -> make -> make install
+ln -s /usr/local/python3.6.4/bin/python3  /usr/bin/python3
+ln -s /usr/local/python3.6.4/bin/pip3  /usr/bin/pip3
+1. python3: error while loading shared libraries: libpython3.5m.so.1.0: cannot open shared object file:
+vi /etc/ld.so.conf.d/python3.conf  ->  /usr/local/python3.6.4/lib
 
+Mongodb:/usr/local/mongodb/
+sys/!QAZ2wsx(root) jason/!QAZ2wsx(admin)
+wget -> mv
+1. add log dir
+2. ln -s
+3. modify /etc/profile ->source
+mongod --config /usr/local/mongod3.4.2/mongodb.conf
+mongod --config /usr/local/mongod3.4.2/mongodb.conf --shutdown
+
+chplayer:
+/home/php/www/phpgraphy/chplayer --photo.jasonsky.com.cn/chplayer
