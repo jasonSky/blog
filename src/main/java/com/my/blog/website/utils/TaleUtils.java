@@ -299,10 +299,11 @@ public class TaleUtils {
         if (StringUtils.isBlank(markdown)) {
             return "";
         }
-        Node document = parser.parse(markdown);
-        HtmlRenderer renderer = HtmlRenderer.builder().build();
-        String content = renderer.render(document);
-        content = Commons.emoji(content);
+        //Node document = parser.parse(markdown);
+        //HtmlRenderer renderer = HtmlRenderer.builder().build();
+        //String content = renderer.render(document);
+        //content = Commons.emoji(content);
+        String content = Commons.emoji(markdown);
 
         // TODO 支持网易云音乐输出
 //        if (TaleConst.BCONF.getBoolean("app.support_163_music", true) && content.contains("[mp3:")) {
