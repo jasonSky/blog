@@ -8,6 +8,8 @@
 <link href="//cdn.bootcss.com/multi-select/0.9.12/css/multi-select.css" rel="stylesheet"/>
 <link href="//cdn.bootcss.com/select2/3.4.8/select2.min.css" rel="stylesheet"/>
 <link th:href="@{/admin/plugins/md/css/style.css}" rel="stylesheet"/>
+
+<link th:src="@{/admin/plugins/nk/libs/bootstrap/bootstrap.min.css}" rel="stylesheet" />
 <style>
     #tags_tagsinput {
         background-color: #fafafa;
@@ -78,7 +80,8 @@
                             </div>
                             <div class="clearfix"></div>
                             <div class="form-group">
-                                <textarea style="height: 450px" autocomplete="off" id="text" name="text" class="markdown-textarea" th:utext="${contents!=null and contents.content !=null}?${contents.content}: ''"></textarea>
+                                <!--<textarea style="height: 450px" autocomplete="off" id="text" name="text" class="markdown-textarea" th:utext="${contents!=null and contents.content !=null}?${contents.content}: ''"></textarea>-->
+                              <textarea style="height: 450px; width: 100%" class="markdown-textarea" id="text" name="text" th:utext="${contents!=null and contents.content !=null}?${contents.content}: ''"></textarea>
                             </div>
 
                             <div class="form-group col-md-3 col-sm-4">
@@ -126,6 +129,40 @@
 </div>
 <div th:replace="admin/footer :: footer"></div>
 
+<script charset="utf-8" th:src="@{/admin/plugins/nk/NKeditor-all.js}"></script>
+<!--<script charset="utf-8" th:src="@{/admin/plugins/nk/libs/jquery.min.js}"></script>-->
+<!-- JDialog是一款优秀的漂亮，轻量级的js弹出框插件 不是必须引入的，如果不引入则使用默认的 window.alert() 来弹出提示信息 -->
+<script charset="utf-8" th:src="@{/admin/plugins/nk/libs/JDialog/JDialog.min.js}"></script>
+<script th:src="@{/admin/plugins/nk/libs/bootstrap/bootstrap.min.js}"></script>
+	<script>
+		KindEditor.ready(function(K) {
+
+			K.create('textarea[name="text"]', {
+				uploadJson : K.basePath+'php/qiniu/upload_json.php',
+				fileManagerJson : K.basePath+'php/qiniu/file_manager_json.php',
+				dialogOffset : 0, //对话框距离页面顶部的位置，默认为0居中，
+				allowFileManager : true,
+				items : ['source','formatblock', 'fontname', 'fontsize','forecolor','justifyleft', 'justifycenter', 'justifyright',
+					'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'bold', 'italic', 'underline',
+					'lineheight', 'removeformat','code', 'quote', 'plainpaste','image', 'table', 'hr', 'pagebreak','link', 'unlink',
+					'preview'
+				],
+				afterChange : function() {
+					this.sync();
+				},
+				themeType : "primary", //主题
+				//错误处理 handler
+				errorMsgHandler : function(message, type) {
+					try {
+						JDialog.msg({type:type, content:message, timer:2000});
+					} catch (Error) {
+						alert(message);
+					}
+				}
+			});
+          });
+</script>
+
 <script th:src="@{/admin/plugins/tagsinput/jquery.tagsinput.min.js}"></script>
 <script th:src="@{/admin/plugins/jquery-multi-select/jquery.quicksearch.js}"></script>
 
@@ -133,7 +170,7 @@
 <script th:src="@{/admin/plugins/md/js/pagedown.js}"></script>
 <script th:src="@{/admin/plugins/md/js/pagedown-extra.js}"></script>
 <script th:src="@{/admin/plugins/md/js/diff.js}"></script>
-<script th:src="@{/admin/plugins/md/js/md.js}"></script>
+<!--<script th:src="@{/admin/plugins/md/js/md.js}"></script>-->
 
 <script th:src="@{//cdn.bootcss.com/multi-select/0.9.12/js/jquery.multi-select.min.js}"></script>
 <script th:src="@{//cdn.bootcss.com/select2/3.4.8/select2.min.js}"></script>
