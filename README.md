@@ -50,6 +50,7 @@
              }
 
 4. nkeditor问题
+https://blog.csdn.net/rogerjava/article/details/82658998
 编辑的源应该为div [textarea会自动把里面的内容进行转义存储]
 修改article的接收方式html()
 
