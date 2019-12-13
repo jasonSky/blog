@@ -28,7 +28,7 @@ var tale = new $.tale();
  */
 function subArticle(status) {
     var title = $('#articleForm input[name=title]').val();
-    var content = $('#text').val();
+    var content = $('#text').html();
     if (title == '') {
         tale.alertWarn('请输入文章标题');
         return;

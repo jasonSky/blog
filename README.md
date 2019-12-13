@@ -49,5 +49,8 @@
                  }
              }
 
+4. nkeditor问题
+编辑的源应该为div [textarea会自动把里面的内容进行转义存储]
+修改article的接收方式html()
 
 访问地址： https://blog.jasonsky.com.cn
