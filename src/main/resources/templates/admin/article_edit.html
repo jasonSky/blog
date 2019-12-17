@@ -133,8 +133,8 @@
 		KindEditor.ready(function(K) {
 
 			K.create('div[name="text"]', {
-				uploadJson : K.basePath+'php/qiniu/upload_json.php',
-				fileManagerJson : K.basePath+'php/qiniu/file_manager_json.php',
+				uploadJson : '/php/default/upload_json.php',
+				fileManagerJson : '/php/default/file_manager_json.php',
 				dialogOffset : 0, //对话框距离页面顶部的位置，默认为0居中，
 				allowFileManager : true,
                                 //filterMode : false,
@@ -157,6 +157,7 @@
 				}
 			});
           });
+  
 </script>
 
 <script th:src="@{/admin/plugins/tagsinput/jquery.tagsinput.min.js}"></script>

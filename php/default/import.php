@@ -8,6 +8,8 @@
  * 重建文件索引， 请使用命令行运行 php import.php
  * @author yangjian
  */
+echo '<meta http-equiv="Content-Type" content="text/hmtl; charset=utf-8" />';
+
 error_reporting(0);
 require_once "db/SimpleDB.php";
 require_once "../functions.php";
@@ -15,7 +17,7 @@ require_once "../functions.php";
 // 文件上传的根目录，请根据自己的实际情况修改
 $root = $basePath = dirname(dirname(__DIR__)) . "/uploads/";
 // 图片上传的根url，请根据实际项目修改
-$baseUrl = "/editor/nkeditor/uploads/";
+$baseUrl = "/usr/tomcat/webapps/blog/uploads/";
 
 //如果数据库已经存在，则先删除
 $datadir = __DIR__.'/db/data';

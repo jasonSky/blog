@@ -9,7 +9,7 @@ define('BASE_PATH', dirname(__DIR__)."/uploads/");
 // 文件上传路径前缀
 define('UPLOAD_PREFIX', date('Ym').'/'.date('d').'/');
 // 文件上传的根 url
-define('BASE_URL', dirname(dirname(dirname($_SERVER['PHP_SELF'])))."/uploads/");
+define('BASE_URL', "/uploads/");
 
 /**
  * 创建多级目录
