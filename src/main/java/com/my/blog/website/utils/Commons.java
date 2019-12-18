@@ -159,7 +159,7 @@ public final class Commons {
      * @return
      */
     public static String gravatar(String email) {
-        String avatarUrl = "https://secure.gravatar.com/avatar";
+        String avatarUrl = "https://gravatar.loli.net/avatar";//secure.gravatar.com/avatar
         if (StringUtils.isBlank(email)) {
             return avatarUrl;
         }
