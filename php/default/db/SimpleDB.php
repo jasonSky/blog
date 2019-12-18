@@ -31,6 +31,7 @@ class SimpleDB {
             mkdir($dataDir);
         }
         $this->handler = fopen($dataDir.$dbname.'.db', 'a+');
+        rewind($this->handler);
     }
 
     /**
@@ -56,10 +57,11 @@ class SimpleDB {
         if($page <= 0) {
             $page = 1;
         }
-        $offset = ($page - 1) * $pagesize;
+        $offset = ($page-1) * $pagesize;
         //循环读取数据
         $datas = [];
         $counter = 0;
+        //print "xxx".ftell($this->handler);
         while (!feof($this->handler)) {
             if ($counter < $offset) {
                 fgets($this->handler); //移动指针到下一行
@@ -70,6 +72,7 @@ class SimpleDB {
                 break;
             }
             $line = fgets($this->handler);
+            //print $line;
             if (!empty($line)) {
                 $datas[] = $this->unseralize($line);
             }

@@ -7,7 +7,7 @@
  * 获取图片服务器上已上传的图片列表
  * @author yangjian<yangjian102621@gmail.com>
  */
-error_reporting(0);
+error_reporting(-1);
 require_once '../JsonResult.php';
 require_once '../functions.php';
 require_once "db/SimpleDB.php";
@@ -19,6 +19,7 @@ $pagesize = 15;
 //读取文件数据
 $db = new SimpleDB($fileType);
 $files = $db->getDataList($page, $pagesize);
+//var_dump($files);
 $result = new JsonResult();
 if (!empty($files)) {
     $result->setCode(JsonResult::CODE_SUCCESS);
@@ -26,4 +27,5 @@ if (!empty($files)) {
 } else {
     $result->setCode(JsonResult::CODE_FAIL);
 }
+//var_dump($result);
 $result->output();
