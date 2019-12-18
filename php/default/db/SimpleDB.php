@@ -31,7 +31,6 @@ class SimpleDB {
             mkdir($dataDir);
         }
         $this->handler = fopen($dataDir.$dbname.'.db', 'a+');
-        rewind($this->handler);
     }
 
     /**
@@ -53,10 +52,11 @@ class SimpleDB {
      * @return array|null
      */
     public function getDataList($page, $pagesize) {
-
+        
         if($page <= 0) {
             $page = 1;
         }
+        rewind($this->handler);
         $offset = ($page-1) * $pagesize;
         //循环读取数据
         $datas = [];

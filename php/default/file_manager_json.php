@@ -7,7 +7,7 @@
  * 获取图片服务器上已上传的图片列表
  * @author yangjian<yangjian102621@gmail.com>
  */
-error_reporting(-1);
+error_reporting(0);
 require_once '../JsonResult.php';
 require_once '../functions.php';
 require_once "db/SimpleDB.php";

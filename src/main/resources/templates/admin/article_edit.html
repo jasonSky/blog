@@ -7,7 +7,6 @@
 
 <link href="//cdn.bootcss.com/multi-select/0.9.12/css/multi-select.css" rel="stylesheet"/>
 <link href="//cdn.bootcss.com/select2/3.4.8/select2.min.css" rel="stylesheet"/>
-<link th:href="@{/admin/plugins/md/css/style.css}" rel="stylesheet"/>
 <style>
     #tags_tagsinput {
         background-color: #fafafa;
@@ -127,7 +126,7 @@
 </div>
 <div th:replace="admin/footer :: footer"></div>
 
-<script charset="utf-8" th:src="@{/admin/plugins/nk/NKeditor-all.js}"></script>
+<script charset="utf-8" th:src="@{/admin/plugins/nk/NKeditor-all-min.js}"></script>
 <script charset="utf-8" th:src="@{/admin/plugins/nk/libs/JDialog/JDialog.min.js}"></script>
 	<script>
 		KindEditor.ready(function(K) {
@@ -162,10 +161,6 @@
 
 <script th:src="@{/admin/plugins/tagsinput/jquery.tagsinput.min.js}"></script>
 <script th:src="@{/admin/plugins/jquery-multi-select/jquery.quicksearch.js}"></script>
-
-<script th:src="@{/admin/plugins/md/js/jquery.scrollto.js}"></script>
-<script th:src="@{/admin/plugins/md/js/diff.js}"></script>
-<!--<script th:src="@{/admin/plugins/md/js/md.js}"></script>-->
 
 <script th:src="@{//cdn.bootcss.com/multi-select/0.9.12/js/jquery.multi-select.min.js}"></script>
 <script th:src="@{//cdn.bootcss.com/select2/3.4.8/select2.min.js}"></script>
