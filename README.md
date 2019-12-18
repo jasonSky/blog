@@ -49,5 +49,13 @@
                  }
              }
 
+4. nkeditor问题
+https://blog.csdn.net/rogerjava/article/details/82658998
+编辑的源应该为div [textarea会自动把里面的内容进行转义存储]
+修改article的接收方式html()
+
+5. php支持
+https://blog.csdn.net/sl543001/article/details/12999737  tomcat php支持
+web.xml + jar 
 
 访问地址： https://blog.jasonsky.com.cn

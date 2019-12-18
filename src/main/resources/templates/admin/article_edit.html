@@ -7,9 +7,6 @@
 
 <link href="//cdn.bootcss.com/multi-select/0.9.12/css/multi-select.css" rel="stylesheet"/>
 <link href="//cdn.bootcss.com/select2/3.4.8/select2.min.css" rel="stylesheet"/>
-<link th:href="@{/admin/plugins/md/css/style.css}" rel="stylesheet"/>
-
-<link th:src="@{/admin/plugins/nk/libs/bootstrap/bootstrap.min.css}" rel="stylesheet" />
 <style>
     #tags_tagsinput {
         background-color: #fafafa;
@@ -81,8 +78,8 @@
                             <div class="clearfix"></div>
                             <div class="form-group">
                                 <!--<textarea style="height: 450px" autocomplete="off" id="text" name="text" class="markdown-textarea" th:utext="${contents!=null and contents.content !=null}?${contents.content}: ''"></textarea>-->
-                              <textarea style="height: 450px; width: 100%" class="markdown-textarea" id="text" name="text" th:utext="${contents!=null and contents.content !=null}?${contents.content}: ''"></textarea>
-                            </div>
+                              <div style="height: 450px; width: 100%" class="markdown-textarea" id="text" name="text" th:utext="${contents!=null and contents.content !=null}?${contents.content}: ''"></div>
+                           </div>
 
                             <div class="form-group col-md-3 col-sm-4">
                                 <label class="col-sm-4">开启评论</label>
@@ -111,7 +108,7 @@
                             <div class="clearfix"></div>
 
                             <div class="text-right">
-                                <a class="btn btn-default waves-effect waves-light" th:href="@{/admin/article}">返回列表</a>
+                                <a class="btn btn-default waves-effect waves-light" href="/admin/article">返回列表</a>
                                 <button type="button" class="btn btn-primary waves-effect waves-light" onclick="subArticle('publish');">
                                     保存文章
                                 </button>
@@ -129,19 +126,17 @@
 </div>
 <div th:replace="admin/footer :: footer"></div>
 
-<script charset="utf-8" th:src="@{/admin/plugins/nk/NKeditor-all.js}"></script>
-<!--<script charset="utf-8" th:src="@{/admin/plugins/nk/libs/jquery.min.js}"></script>-->
-<!-- JDialog是一款优秀的漂亮，轻量级的js弹出框插件 不是必须引入的，如果不引入则使用默认的 window.alert() 来弹出提示信息 -->
+<script charset="utf-8" th:src="@{/admin/plugins/nk/NKeditor-all-min.js}"></script>
 <script charset="utf-8" th:src="@{/admin/plugins/nk/libs/JDialog/JDialog.min.js}"></script>
-<script th:src="@{/admin/plugins/nk/libs/bootstrap/bootstrap.min.js}"></script>
 	<script>
 		KindEditor.ready(function(K) {
 
-			K.create('textarea[name="text"]', {
-				uploadJson : K.basePath+'php/qiniu/upload_json.php',
-				fileManagerJson : K.basePath+'php/qiniu/file_manager_json.php',
+			K.create('div[name="text"]', {
+				uploadJson : '/php/default/upload_json.php',
+				fileManagerJson : '/php/default/file_manager_json.php',
 				dialogOffset : 0, //对话框距离页面顶部的位置，默认为0居中，
 				allowFileManager : true,
+                                //filterMode : false,
 				items : ['source','formatblock', 'fontname', 'fontsize','forecolor','justifyleft', 'justifycenter', 'justifyright',
 					'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'bold', 'italic', 'underline',
 					'lineheight', 'removeformat','code', 'quote', 'plainpaste','image', 'table', 'hr', 'pagebreak','link', 'unlink',
@@ -161,16 +156,11 @@
 				}
 			});
           });
+  
 </script>
 
 <script th:src="@{/admin/plugins/tagsinput/jquery.tagsinput.min.js}"></script>
 <script th:src="@{/admin/plugins/jquery-multi-select/jquery.quicksearch.js}"></script>
-
-<script th:src="@{/admin/plugins/md/js/jquery.scrollto.js}"></script>
-<script th:src="@{/admin/plugins/md/js/pagedown.js}"></script>
-<script th:src="@{/admin/plugins/md/js/pagedown-extra.js}"></script>
-<script th:src="@{/admin/plugins/md/js/diff.js}"></script>
-<!--<script th:src="@{/admin/plugins/md/js/md.js}"></script>-->
 
 <script th:src="@{//cdn.bootcss.com/multi-select/0.9.12/js/jquery.multi-select.min.js}"></script>
 <script th:src="@{//cdn.bootcss.com/select2/3.4.8/select2.min.js}"></script>
