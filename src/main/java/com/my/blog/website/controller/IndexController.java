@@ -20,19 +20,30 @@ import com.my.blog.website.modal.Vo.ContentVo;
 import com.my.blog.website.service.ICommentService;
 import com.my.blog.website.service.IContentService;
 import com.my.blog.website.utils.IPKit;
+import com.my.blog.website.utils.ImageBinary;
+
 import org.apache.commons.lang3.StringUtils;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,6 +52,7 @@ import java.util.List;
  */
 @Controller
 public class IndexController extends BaseController {
+	int i = 100000;
     private static final Logger LOGGER = LoggerFactory.getLogger(IndexController.class);
 
     @Resource
@@ -63,6 +75,39 @@ public class IndexController extends BaseController {
     @GetMapping(value = {"/", "index"})
     public String index(HttpServletRequest request, @RequestParam(value = "limit", defaultValue = "12") int limit) {
         return this.index(request, 1, limit);
+    }
+    
+    @PostMapping(value = "uploadImg")
+	@ResponseBody
+    public String uploadImg(HttpServletRequest request, @RequestParam("imgFile") MultipartFile zipFile) {
+    	String webRootPath=request.getServletContext().getRealPath("");
+//		JSONObject jo=new JSONObject(param);
+//		String binaryString = jo.getString("imgFile");
+		Date date=new Date();
+		String str = new SimpleDateFormat("yyyyMMddHHmmss").format(date);
+		String urlPath = "/uploads/image/"+str.substring(0,6)+"/"
+				+ str.substring(6,8) + "/" +str+"_" + i++ + ".jpg";
+		String path=webRootPath+urlPath;
+		
+//		ImageBinary.base64StringToImage(path, binaryString);
+		File targetFile = new File(path);
+		File fileParent = targetFile.getParentFile();  
+		if(!fileParent.exists()){  
+			fileParent.mkdirs();  
+		}  
+		try {
+			targetFile.createNewFile();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}  
+		try(FileOutputStream fileOutputStream = new FileOutputStream(targetFile)) {
+			IOUtils.copy(zipFile.getInputStream(), fileOutputStream);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		JSONObject res = new JSONObject();
+		res.put("url", urlPath);
+    	return res.toString();
     }
 
     /**
