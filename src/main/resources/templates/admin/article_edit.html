@@ -131,7 +131,7 @@
 	<script>
 		KindEditor.ready(function(K) {
 
-			K.create('div[name="text"]', {
+			var editor = K.create('div[name="text"]', {
 				uploadJson : '/php/default/upload_json.php',
 				fileManagerJson : '/php/default/file_manager_json.php',
 				dialogOffset : 0, //对话框距离页面顶部的位置，默认为0居中，
@@ -143,8 +143,64 @@
 					'preview'
 				],
 				afterChange : function() {
-					this.sync();
+					//this.sync();
 				},
+				afterCreate: function () {
+					var editerDoc = this.edit.doc;
+					//监听粘贴事件, 包括右键粘贴和ctrl+v
+					$(editerDoc).bind('paste', function (e) {
+						var ele = e.originalEvent.clipboardData.items;
+						/*<![CDATA[*/
+						for (var i = 0; i < ele.length; ++i) {
+							//判断文件类型
+                                                        var pstct="";
+                                                        ele[i].getAsString(function(str){ pstct = str; });
+							if (ele[i].type.indexOf('image/') !== -1 || pstct.indexOf('data:image') !== -1) {
+						                e.originalEvent.preventDefault();
+                                                		var file = ele[i].getAsFile();
+                                                                if(file==null){                                          
+                                                                    var imgReg = /<img[^>]+>/g;
+							            var srcReg = /src=[\'\"]?([^\'\"]*)[\'\"]?/i;
+								    var arr = pstct.match(imgReg); 
+								    for(var i=0;i<arr.length;i++)
+								    {
+                                                                        var result=arr[i].match(srcReg)[1];
+								        if(result.indexOf("data:image") !== -1 ){
+                                                                            alert(result);
+                                                                            break;  
+								        }
+								    } 
+                                                                }
+								var formData = new FormData();
+								formData.append("imgFile", file); //name,value
+
+								//用jquery Ajax 上传二进制数据
+								$.ajax({
+									url: '/uploadImg',
+									type: 'POST',
+									data: formData,
+									// 告诉jQuery不要去处理发送的数据
+									processData: false,
+									contentType: false,
+									dataType: "json",
+									beforeSend: function () {
+										//console.log("正在进行，请稍候");
+									},
+									success: function (responseStr) {
+										var src = responseStr.url;
+										var imgTag = "<img src='" + src + "' border='0'/>";
+										//alert(imgTag);
+                                                                                editor.insertHtml(imgTag);
+									},
+									error: function (responseStr) {
+										console.log("error");
+									}
+								});
+							}
+						}
+						/*]]>*/
+					});
+				},                      
 				themeType : "primary", //主题
 				//错误处理 handler
 				errorMsgHandler : function(message, type) {

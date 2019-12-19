@@ -58,3 +58,6 @@ https://blog.csdn.net/rogerjava/article/details/82658998
 https://blog.csdn.net/sl543001/article/details/12999737  tomcat php支持
 web.xml + jar 
 
+6. 引用thymeleaf模板，js中大于小于等符号转义异常问题
+https://blog.csdn.net/weixin_39681426/article/details/99938649
+
