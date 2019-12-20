@@ -128,99 +128,115 @@
 
 <script charset="utf-8" th:src="@{/admin/plugins/nk/NKeditor-all-min.js}"></script>
 <script charset="utf-8" th:src="@{/admin/plugins/nk/libs/JDialog/JDialog.min.js}"></script>
-	<script>
-		KindEditor.ready(function(K) {
+<script>
+        /*<![CDATA[*/
+        KindEditor.ready(function(K) {
 
-			var editor = K.create('div[name="text"]', {
-				uploadJson : '/php/default/upload_json.php',
-				fileManagerJson : '/php/default/file_manager_json.php',
-				dialogOffset : 0, //对话框距离页面顶部的位置，默认为0居中，
-				allowFileManager : true,
+            var editor = K.create('div[name="text"]', {
+                uploadJson : '/php/default/upload_json.php',
+                fileManagerJson : '/php/default/file_manager_json.php',
+                dialogOffset : 0, //对话框距离页面顶部的位置，默认为0居中，
+                allowFileManager : true,
                                 //filterMode : false,
-				items : ['source','formatblock', 'fontname', 'fontsize','forecolor','justifyleft', 'justifycenter', 'justifyright',
-					'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'bold', 'italic', 'underline',
-					'lineheight', 'removeformat','code', 'quote', 'plainpaste','image', 'table', 'hr', 'pagebreak','link', 'unlink',
-					'preview'
-				],
-				afterChange : function() {
-					//this.sync();
-				},
-				afterCreate: function () {
-					var editerDoc = this.edit.doc;
-					//监听粘贴事件, 包括右键粘贴和ctrl+v
-					$(editerDoc).bind('paste', function (e) {
-						var ele = e.originalEvent.clipboardData.items;
-						/*<![CDATA[*/
-						for (var i = 0; i < ele.length; ++i) {
-							//判断文件类型
-                                                        var pstct="";
-                                                        ele[i].getAsString(function(str){ pstct = str; });
-							if (ele[i].type.indexOf('image/') !== -1 || pstct.indexOf('data:image') !== -1) {
-						                e.originalEvent.preventDefault();
-                                                		var file = ele[i].getAsFile();
-                                                                if(file==null){                                          
-                                                                    var imgReg = /<img[^>]+>/g;
-							            var srcReg = /src=[\'\"]?([^\'\"]*)[\'\"]?/i;
-								    var arr = pstct.match(imgReg); 
-								    for(var i=0;i<arr.length;i++)
-								    {
-                                                                        var result=arr[i].match(srcReg)[1];
-								        if(result.indexOf("data:image") !== -1 ){
-                                                                            alert(result);
-                                                                            break;  
-								        }
-								    } 
-                                                                }
-								var formData = new FormData();
-								formData.append("imgFile", file); //name,value
+                items : ['source','formatblock', 'fontname', 'fontsize','forecolor','justifyleft', 'justifycenter', 'justifyright',
+                    'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'bold', 'italic', 'underline',
+                    'lineheight', 'removeformat','code', 'quote', 'plainpaste','image', 'table', 'hr', 'pagebreak','link', 'unlink',
+                    'preview'
+                ],
+                afterChange : function() {
+                    this.sync();
+                },
+                afterCreate: function () {
+                    var editerDoc = this.edit.doc;
+                    //监听粘贴事件, 包括右键粘贴和ctrl+v
+                    $(editerDoc).bind('paste', function (e) {
+                        var ele = e.originalEvent.clipboardData.items;
+                        //e.originalEvent.preventDefault();
+                        for (var i = 0; i < ele.length; ++i) {
+                            //复核类型进行处理
+                            if(ele[i].type==="text/html"){
+                              e.originalEvent.preventDefault();
+                              ele[i].getAsString(function(pstct){//data文件类型
+                                if(pstct.indexOf('data:image') !== -1){
+                                    editor.insertHtml(pstct.replace(/<\s?img[^>]*>/gi, ''));//复合text
+                                    var imgReg = /<img[^>]+>/g;
+                                    var srcReg = /src=[\'\"]?([^\'\"]*)[\'\"]?/i;
+                                    var arr = pstct.match(imgReg); 
+                                    for(var i=0;i<arr.length;i++){
+                                        var result=arr[i].match(srcReg)[1];
+                                        if(result.indexOf("data:image") !== -1 ){
+                                            var file = base64DataToImageFile(result);
+                                            ajaxUpload(file, editor)
+                                        }
+                                    } 
+                                }else{
+                                    editor.insertHtml(pstct);
+                                }
+                              });
+                            }
+                            if (ele[i].type.indexOf('image/') !== -1) {//文件类型
+                                e.originalEvent.preventDefault();
+                                var file = ele[i].getAsFile();
+                                ajaxUpload(file, editor)
+                            }
+                        }
+                    });
+                },                      
+                themeType : "primary", //主题
+                                       th:value="${contents!=null and contents.tags !=null}?${contents.tags}: ''"/>
+                            </div>
 
-								//用jquery Ajax 上传二进制数据
-								$.ajax({
-									url: '/uploadImg',
-									type: 'POST',
-									data: formData,
-									// 告诉jQuery不要去处理发送的数据
-									processData: false,
-									contentType: false,
-									dataType: "json",
-									beforeSend: function () {
-										//console.log("正在进行，请稍候");
-									},
-									success: function (responseStr) {
-										var src = responseStr.url;
-										var imgTag = "<img src='" + src + "' border='0'/>";
-										//alert(imgTag);
-                                                                                editor.insertHtml(imgTag);
-									},
-									error: function (responseStr) {
-										console.log("error");
-									}
-								});
-							}
-						}
-						/*]]>*/
-					});
-				},                      
-				themeType : "primary", //主题
-				//错误处理 handler
-				errorMsgHandler : function(message, type) {
-					try {
-						JDialog.msg({type:type, content:message, timer:2000});
-					} catch (Error) {
-						alert(message);
-					}
-				}
-			});
-          });
-  
-</script>
+                            <div class="form-group col-md-6">
+                                <select id="multiple-sel" class="select2 form-control" multiple="multiple" data-placeholder="请选择分类...">
+                                    <th:block th:if="${null == categories}">
+                                        <option value="默认分类" selected="selected">默认分类</option>
+                                    </th:block>
+                                    <th:block th:unless="${null == categories}">
+                                        <th:block th:each="c : ${categories}">
+                                            <option th:value="${c.name}" th:text="${c.name}"  th:selected="${null !=contents and adminCommons.exist_cat(c, contents.categories)}?true:false" ></option>
+                                        </th:block>
+                                    </th:block>
+                                </select>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="form-group">
+                                <!--<textarea style="height: 450px" autocomplete="off" id="text" name="text" class="markdown-textarea" th:utext="${contents!=null and contents.content !=null}?${contents.content}: ''"></textarea>-->
+                              <div style="height: 450px; width: 100%" class="markdown-textarea" id="text" name="text" th:utext="${contents!=null and contents.content !=null}?${contents.content}: ''"></div>
+                           </div>
 
-<script th:src="@{/admin/plugins/tagsinput/jquery.tagsinput.min.js}"></script>
-<script th:src="@{/admin/plugins/jquery-multi-select/jquery.quicksearch.js}"></script>
+                            <div class="form-group col-md-3 col-sm-4">
+                                <label class="col-sm-4">开启评论</label>
+                                <div class="col-sm-8">
+                                    <div th:class="${contents!=null and contents.allowComment!=null }?'toggle toggle-success allow-'+${contents.allowComment}:'toggle toggle-success allow-true'"
+                                         onclick="allow_comment(this);"></div>
+                                </div>
+                            </div>
 
-<script th:src="@{//cdn.bootcss.com/multi-select/0.9.12/js/jquery.multi-select.min.js}"></script>
-<script th:src="@{//cdn.bootcss.com/select2/3.4.8/select2.min.js}"></script>
-<script th:src="@{//cdn.bootcss.com/jquery-toggles/2.0.4/toggles.min.js}"></script>
-<script th:src="@{/admin/js/article.js}"></script>
-</body>
-</html>
+                            <div class="form-group col-md-3 col-sm-4">
+                                <label class="col-sm-4">允许Ping</label>
+                                <div class="col-sm-8">
+                                    <div th:class="${contents!=null and contents.allowPing !=null}?'toggle toggle-success allow-'+${contents.allowPing}:'toggle toggle-success allow-true'"
+                                         onclick="allow_ping(this);"></div>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-3 col-sm-4">
+                                <label class="col-sm-4">允许订阅</label>
+                                <div class="col-sm-8">
+                                    <div th:class="${contents!=null and  contents.allowFeed !=null}?'toggle toggle-success allow-'+${contents.allowFeed}: 'toggle toggle-success allow-true'"
+                                         onclick="allow_feed(this);"></div>
+                                </div>
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                            <div class="text-right">
+                                <a class="btn btn-default waves-effect waves-light" href="/admin/article">返回列表</a>
+                                <button type="button" class="btn btn-primary waves-effect waves-light" onclick="subArticle('publish');">
+                                    保存文章
+                                </button>
+                                <button type="button" class="btn btn-warning waves-effect waves-light" onclick="subArticle('draft');">
+                                    存为草稿
+                                </button>
+                            </div>
+                        </form>
