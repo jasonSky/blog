@@ -17,7 +17,7 @@ require_once "../functions.php";
 // 文件上传的根目录，请根据自己的实际情况修改
 $root = $basePath = dirname(dirname(__DIR__)) . "/uploads/";
 // 图片上传的根url，请根据实际项目修改
-$baseUrl = "/usr/tomcat/webapps/blog/uploads/";
+$baseUrl = "/uploads/";
 
 //如果数据库已经存在，则先删除
 $datadir = __DIR__.'/db/data';
@@ -75,5 +75,5 @@ function walkDir($dir, $db, $fileType) {
  * @param $message
  */
 function tprint($message) {
-    printf("\033[32m\033[1m{$message}\033[0m\n");
+    printf("\033[32m\033[1m{$message}\033[0m\r\n");
 }
