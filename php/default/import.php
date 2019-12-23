@@ -21,6 +21,7 @@ $baseUrl = "/uploads/";
 
 //如果数据库已经存在，则先删除
 $datadir = __DIR__.'/db/data';
+//print $datadir;
 file_exists($datadir) && deldir($datadir);
 
 chdir($root);
@@ -75,5 +76,5 @@ function walkDir($dir, $db, $fileType) {
  * @param $message
  */
 function tprint($message) {
-    printf("\033[32m\033[1m{$message}\033[0m\r\n");
+    printf("\033[32m\033[1m{$message}\033[0m<br/>");
 }
