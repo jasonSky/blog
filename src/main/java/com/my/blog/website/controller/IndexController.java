@@ -33,13 +33,16 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.imageio.ImageIO;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
@@ -105,6 +108,23 @@ public class IndexController extends BaseController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		//{"thumbURL":"\/uploads\/image\/201912\/18\/20191218165027_79943.png","oriURL":"\/uploads\/image\/201912\/18\/20191218165027_79943.png","filesize":19974,"width":170,"height":138}
+		try(FileWriter fw = new FileWriter(webRootPath+new File("/php/default/db/data/image.db"),true);){
+			BufferedImage read = ImageIO.read(targetFile);
+			read.getData().getHeight();
+			;
+			JSONObject record = new JSONObject();
+			record.put("thumbURL", urlPath);
+			record.put("oriURL", urlPath);
+			record.put("filesize", targetFile.length());
+			record.put("width", read.getData().getWidth());
+			record.put("height", read.getData().getHeight());
+			fw.write(record.toString()+"\n");
+			fw.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		JSONObject res = new JSONObject();
 		res.put("url", urlPath);
     	return res.toString();
