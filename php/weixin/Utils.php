@@ -79,6 +79,59 @@ class Utils
         return $access_token;
     }
 
+    public static function getJsApiToken()
+    {
+        Utils::logger("getJsApi");
+        $url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?type=jsapi&access_token=".Utils::getToken();
+        //本地写入 缓存jsapi_token
+        Utils::logger($url);
+        $tokenFile = "./jsapi_token.json";
+        $res = file_get_contents($tokenFile);
+        $result = json_decode($res, true);
+        $expires_time = $result["expires_time"];
+        $jsapi_token = $result["ticket"];
+        if (time() > ($expires_time + 7200)){
+            $output = https_request($url);
+            Utils::logger($output);
+            $jsoninfo = json_decode($output, true);
+            $jsapi_token = $jsoninfo["ticket"];
+            file_put_contents($tokenFile, '{"ticket": "'.$jsapi_token.'", "expires_time": '.time().'}');
+        }
+        return $jsapi_token;
+    }
+
+    public static function getSignPackage() {
+        $jsapiTicket = Utils::getJsApiToken();
+        $url = "https://$_SERVER[HTTP_HOST]".substr("$_SERVER[REQUEST_URI]",5);
+        $timestamp = time();
+        $nonceStr = $this->createNonceStr();
+
+        // 这里参数的顺序要按照 key 值 ASCII 码升序排序
+        $string = "jsapi_ticket=$jsapiTicket&noncestr=".$nonceStr."&timestamp=$timestamp&url=$url";
+
+        $signature = sha1($string);
+
+        $signPackage = array(
+          "appId"     => self::$appid,
+          "nonceStr"  => $nonceStr,
+          "timestamp" => $timestamp,
+          "url"       => $url,
+          "signature" => $signature,
+          "rawString" => $string
+        );
+        Utils::logger(print_r($signPackage, true)); 
+        return $signPackage; 
+    }
+      
+    private function createNonceStr($length = 16) {
+        $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        $str = "";
+        for ($i = 0; $i < $length; $i++) {
+          $str .= substr($chars, mt_rand(0, strlen($chars) - 1), 1);
+        }
+        return $str;
+    }
+
     //保存图片到本地
     public static function save_weixin_file($filename, $fileConent)
     {

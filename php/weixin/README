@@ -13,3 +13,8 @@ ZhConvert.php - 繁体简体转换
 5. 爬取相关
 1>music文件夹下的 retriveM4A.py qq音乐相关
 2>Java_Test项目QiuBai目录 ： 糗事百科相关
+
+6. jssdk配置
+1> access_token + jsapi_ticket
+2> https://mp.weixin.qq.com/debug/cgi-bin/sandbox?t=jsapisign  js签名验证[tiket&noncestr&time&url]
+3> 微信开发者工具进行debug  [浏览器加载weixin js会报错]
