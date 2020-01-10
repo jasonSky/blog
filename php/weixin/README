@@ -1,0 +1,15 @@
+1. 古诗词接口（php + composer）
+chinese-poetry - 古诗词json库
+chinese-poetry-to-mysql-tool - 将古诗词转为sql文件
+建表时选择编码为utf8mb4 --4字节繁体
+mysql: source sql文件导入
+
+ZhConvert.php - 繁体简体转换
+
+2. check.php 公众号配置的默认文件
+
+3. menu,resource,user常用接口操作
+
+5. 爬取相关
+1>music文件夹下的 retriveM4A.py qq音乐相关
+2>Java_Test项目QiuBai目录 ： 糗事百科相关
