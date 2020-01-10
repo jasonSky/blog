@@ -19,20 +19,46 @@ class MenuOperate
   public static $menujson = '{
     "button": [
         {
-            "name": "操作",
+            "name": "小功能",
             "sub_button": [
                 {
                     "type": "click",
                     "name": "轻松一下",
                     "key": "qiushi"
+                },
+                {
+                    "type": "click",
+                    "name": "古诗词",
+                    "key": "sici"
+                },
+                {
+                    "type": "click",
+                    "name": "古诗词-繁体",
+                    "key": "sicibig5"
                 }
             ]
         },
         {
+           "name": "网站",
+           "sub_button":[
+             {
              "type": "view",
              "name": "博客",
              "url": "https://blog.jasonsky.com.cn"
+             },
+             {
+             "type": "view",
+             "name": "相册",
+             "url": "https://photo.jasonsky.com.cn"
+            }
+           ]
+        },
+        {
+             "type": "view",
+             "name": "简介",
+             "url": "https://info.jasonsky.com.cn"
         }
+
     ]
 }';
 

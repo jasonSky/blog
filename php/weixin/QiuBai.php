@@ -5,7 +5,7 @@ function getData($idx){
     //error_reporting(E_ALL | E_STRICT);
     header("Content-type:text/html;charset=utf-8");
     //连接数据库
-    $con = mysql_connect("localhost:3309","dbuser","dbpass");
+    $con = mysql_connect("localhost:3309","root","!QAZ2wsx");
     if ($con) {
         //echo "connect success";
         //选择数据库

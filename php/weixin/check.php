@@ -111,6 +111,14 @@ function checkSignature()
                    $str = file_get_contents("./idx");
                    $content=getData($str+1);
                    file_put_contents("./idx", $str+1);
+                }else if($content=='sici'){
+                   $data=Utils::getOnePoem();
+                   Utils::logger("poem:".print_r($data,true));
+                   $content=Utils::convertChinese($data['title']."\n"."\t\t\t\t作者: ".$data['author']."\n".$data['content']);
+                }else if($content=='sicibig5'){
+                   $data=Utils::getOnePoem();
+                   Utils::logger("poem:".print_r($data,true));
+                   $content=$data['title']."\n"."\t\t\t\t作者: ".$data['author']."\n".$data['content'];
                 }
                 break;
             case "MASSSENDJOBFINISH":

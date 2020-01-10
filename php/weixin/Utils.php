@@ -1,4 +1,6 @@
 <?php
+require_once("SqlOperate.php");
+require("ZhConvert.php");
 require_once("HttpUtils.php");
 
 class Utils
@@ -48,8 +50,11 @@ class Utils
 
     //成员变量
     //公众号
-    //public static $appid = ""; //需替换成你的appID的值
-    //public static $appsecret = "";  //需替换成你的appsecret的值
+    //public static $appid = "wx6d6d705e0542b8cb"; //需替换成你的appID的值
+    //public static $appsecret = "ead7f54dbadb57edb81a381ce37d7bf0";  //需替换成你的appsecret的值
+    //测试号
+    public static $appid = "wx47cd8daa57d1c17d";
+    public static $appsecret = "e00ec1a36075d5486d59744de452db1a";
     /*
     *  获取access_token
     */
@@ -104,4 +109,16 @@ class Utils
         return "http://ws.stream.qqmusic.qq.com/".$wifiurl;
     } 
      
+    public static function getOnePoem(){
+       $con=SqlOperate::conn();
+       $data=SqlOperate::query($con);
+       mysql_close($con);
+       //var_dump($data[0]);
+       return $data[0];
+    }
+
+    public static function convertChinese($str){
+        return ZhConvert::zh_hant_to_zh_hans_old($str); 
+    }
+  
 }
