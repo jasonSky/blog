@@ -16,9 +16,9 @@ public static function conn(){
 }
 
 //随机取一条数据
-public static function query($con){
+public static function query($con, $table='tb_poems'){
     $con->query('set names utf8;'); 
-    $sql = "SELECT * FROM tb_poems ORDER BY RAND() LIMIT 1";  
+    $sql = "SELECT * FROM ".$table." ORDER BY RAND() LIMIT 1";  
     $result = $con->query($sql);  
     $data=array();
     while ($tmp=mysqli_fetch_assoc($result)) {

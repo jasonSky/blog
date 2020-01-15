@@ -68,6 +68,21 @@ function checkSignature()
                         //$url = Utils::getMusicUrl($title);
                         $url = "https://blog.jasonsky.com.cn/php/weixin/music/".urlencode($title).".m4a";
                         $result = transmitMusic($postObj, $title, $title, $url, "XirC7cn0q3zEGv01E0cU-wYdSRLeFqOh2JudQAkdzqU6T7Zfm0aOD0WxYf6Ntpu9");
+                    }else if(mb_strpos($txt, "AV")!==false || mb_strpos($txt, "av")!==false){
+                         //$keyword = substr($txt,9);
+                         //$url_av="https://photo.jasonsky.com.cn/api/index.php?name=".$keyword;
+                         //Utils::logger($url_av);
+                         //$resobj = https_request($url_av);
+                         //$jsoninfo = json_decode($resobj, true);
+                         //if(count($jsoninfo["data"])>1){//txt消息长度限制
+                         //      $jsoninfo["data"] = array_slice($jsoninfo["data"],0,1);
+                         //}
+                         //foreach($jsoninfo["data"] as $obj){
+                         //    $content .= $obj["name"].":".$obj["live"]." ";
+                         //}
+                         $keyword = substr($txt,5);
+                         $content="https://photo.jasonsky.com.cn/api/index.php?name=".$keyword; 
+                         $result = transmitText($postObj, $content);
                     }else{
                         $url_define="http://api.qingyunke.com/api.php?key=free&appid=0&msg=".urlencode($txt);
                         Utils::logger($url_define);
@@ -119,6 +134,14 @@ function checkSignature()
                    $data=Utils::getOnePoem();
                    Utils::logger("poem:".print_r($data,true));
                    $content=$data['title']."\n"."\t\t\t\t作者: ".$data['author']."\n".$data['content'];
+                }else if($content=='juzi'){
+                   $data=Utils::getOneJuzi();
+                   Utils::logger("poem:".print_r($data,true));
+                   $content= "\t".$data['content'];
+                }else if($content=='miyu'){
+                   $data=Utils::getOneCaimi();
+                   Utils::logger("poem:".print_r($data,true));
+                   $content= "\t".$data['content'];
                 }
                 break;
             case "MASSSENDJOBFINISH":

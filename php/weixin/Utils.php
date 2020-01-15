@@ -170,6 +170,22 @@ class Utils
        return $data[0];
     }
 
+    public static function getOneJuzi(){
+       $con=SqlOperate::conn();
+       $data=SqlOperate::query($con, "tb_juzi");
+       mysql_close($con);
+       //var_dump($data[0]);
+       return $data[0];
+    }
+
+    public static function getOneCaimi(){
+       $con=SqlOperate::conn();
+       $data=SqlOperate::query($con, "tb_miyu");
+       mysql_close($con);
+       //var_dump($data[0]);
+       return $data[0];
+    }
+
     public static function convertChinese($str){
         return ZhConvert::zh_hant_to_zh_hans_old($str); 
     }

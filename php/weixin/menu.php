@@ -28,6 +28,16 @@ class MenuOperate
                 },
                 {
                     "type": "click",
+                    "name": "文摘句子",
+                    "key": "juzi"
+                },
+                {
+                    "type": "click",
+                    "name": "猜谜语",
+                    "key": "miyu"
+                },
+                {
+                    "type": "click",
                     "name": "古诗词",
                     "key": "sici"
                 },
@@ -50,7 +60,12 @@ class MenuOperate
              "type": "view",
              "name": "相册",
              "url": "https://photo.jasonsky.com.cn"
-            }
+             },
+             {
+             "type": "view",
+             "name": "JSSDK",
+             "url": "https://blog.jasonsky.com.cn/php/weixin/jssdk.php"
+             }
            ]
         },
         {

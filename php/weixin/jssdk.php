@@ -11,7 +11,8 @@ $signPackage = Utils::GetSignPackage();
   <title></title>
 </head>
 <body>
-xxxxxxx  
+<button id="qrcode" onclick="scanCode()" style="width:200px;height:80px" ><b>扫 码</b></button>
+<div id="result"></div>
 </body>
 <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script>
@@ -20,7 +21,7 @@ xxxxxxx
   // 完整 JS-SDK 文档地址：http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html';
 
   wx.config({
-    debug: true,
+    debug: false,
     appId: '<?php echo $signPackage["appId"];?>',
     timestamp: <?php echo $signPackage["timestamp"];?>,
     nonceStr: '<?php echo $signPackage["nonceStr"];?>',
@@ -36,9 +37,36 @@ xxxxxxx
                             'showAllNonBaseMenuItem','hideAllNonBaseMenuItem','scanQRCode'
     ]
   });
-  wx.ready(function () {
+  wx.ready(function () {//用户主动触发的动作不用写在这里
     // 在这里调用 API
   });
+  wx.error(function(res){
+    // config信息验证失败会执行error函数，如签名过期导致验证失败，具体
+    //错误信息可以打开config的debug模式查看，也可以在返回的res参数中查
+    //看，对于SPA可以在这里更新签名。
+  });
+
+function scanCode() {
+    wx.scanQRCode({
+        needResult:1,
+        scanType: ["qrCode","barCode"],
+        success:function (res) {
+            console.log(res)
+            var result = res.resultStr;
+            document.getElementById("result").innerHTML="<a>"+result+"</a>"; 
+            //setTimeout(callback(result),500);
+        },
+
+        error:function(res){
+            alert(JSON.stringify(res))
+            if(res.errMsg.indexOf('function_not_exist') >0){
+                alert('版本过低请升级')
+            }
+        }
+    });
+}  
+
+
 </script>
 </html>
 
