@@ -27,6 +27,17 @@ public static function query($con, $table='tb_poems'){
     return $data;
 }
 
+public static function queryByIndex($con, $table='tb_poems', $index){
+    $con->query('set names utf8;');
+    $sql = "SELECT * FROM ".$table." where id=".$index;
+    $result = $con->query($sql);
+    $data=array();
+    while ($tmp=mysqli_fetch_assoc($result)) {
+        $data[]=$tmp;
+    }
+    return $data;
+}
+
 }
 
 //$con =SqlOperate::conn();

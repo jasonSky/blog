@@ -140,7 +140,16 @@ function checkSignature()
                    $content= "\t".$data['content'];
                 }else if($content=='miyu'){
                    $data=Utils::getOneCaimi();
-                   Utils::logger("poem:".print_r($data,true));
+                   Utils::logger("猜谜:".print_r($data,true));
+                   $content= "\t".$data['content'];
+                }else if($content=='yizhi'){
+                   $inx=file_get_contents("./file/yizhi");
+                   if($inx+1>2000){
+                      $inx=0;
+                   }
+                   file_put_contents("./file/yizhi", $inx+1);
+                   $data=Utils::getOneYizhi($inx);
+                   Utils::logger("益智2000问:".print_r($data,true));
                    $content= "\t".$data['content'];
                 }
                 break;

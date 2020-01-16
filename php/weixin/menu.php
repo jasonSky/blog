@@ -14,7 +14,12 @@ if($val=="create" || $val=="add"){
 
 class MenuOperate
 { 
- 
+
+//{
+                //    "type": "click",
+                //    "name": "轻松一下",
+                //    "key": "qiushi"
+                //}, 
   //菜单字符串
   public static $menujson = '{
     "button": [
@@ -23,8 +28,8 @@ class MenuOperate
             "sub_button": [
                 {
                     "type": "click",
-                    "name": "轻松一下",
-                    "key": "qiushi"
+                    "name": "少儿益智2000问",
+                    "key": "yizhi"
                 },
                 {
                     "type": "click",

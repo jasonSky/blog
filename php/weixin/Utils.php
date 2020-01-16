@@ -186,6 +186,15 @@ class Utils
        return $data[0];
     }
 
+    public static function getOneYizhi($index){
+       $con=SqlOperate::conn();
+       $data=SqlOperate::queryByIndex($con, "tb_yizhi", $index);
+       mysql_close($con);
+       //var_dump($data[0]);
+       return $data[0];
+    }
+
+
     public static function convertChinese($str){
         return ZhConvert::zh_hant_to_zh_hans_old($str); 
     }
