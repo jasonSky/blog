@@ -423,10 +423,10 @@ public class TaleUtils {
         return false;
     }
 
-    public static String getFileKey(String name) {
-        String prefix = "/upload/" + DateKit.dateFormat(new Date(), "yyyy/MM");
-        if (!new File(AttachController.CLASSPATH + prefix).exists()) {
-            new File(AttachController.CLASSPATH + prefix).mkdirs();
+    public static String getFileKey(String parent, String name, String ftype) {
+        String prefix = "/uploads/"+ftype+ "/"+ DateKit.dateFormat(new Date(), "yyyy/MM");
+        if (!new File(parent + prefix).exists()) {
+            new File(parent + prefix).mkdirs();
         }
 
         name = StringUtils.trimToNull(name);
