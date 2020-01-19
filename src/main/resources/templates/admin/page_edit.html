@@ -38,7 +38,7 @@
                             </div>
 
                             <div class="form-group">
-                                <textarea style="height: 450px" autocomplete="off" id="text" name="text" class="markdown-textarea" th:utext="${contents!=null and contents.content !=null}?${contents.content}: ''"></textarea>
+                                <div style="height: 450px" autocomplete="off" id="text" name="text" class="markdown-textarea" th:utext="${contents!=null and contents.content !=null}?${contents.content}: ''"></div>
                             </div>
 
                             <div class="text-right">
@@ -55,11 +55,111 @@
     </div>
 </div>
 <div th:replace="admin/footer :: footer"></div>
+
+<script charset="utf-8" th:src="@{/admin/plugins/nk/NKeditor-all-min.js}"></script>
+<script charset="utf-8" th:src="@{/admin/plugins/nk/libs/JDialog/JDialog.min.js}"></script>
+<script>
+        /*<![CDATA[*/
+        KindEditor.ready(function(K) {
+
+            var editor = K.create('div[name="text"]', {
+                uploadJson : '/php/default/upload_json.php',
+                fileManagerJson : '/php/default/file_manager_json.php',
+                dialogOffset : 0, //对话框距离页面顶部的位置，默认为0居中，
+                allowFileManager : true,
+                                //filterMode : false,
+                items : ['source','formatblock', 'fontname', 'fontsize','forecolor','justifyleft', 'justifycenter', 'justifyright',
+                    'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'bold', 'italic', 'underline',
+                    'lineheight', 'removeformat','code', 'quote', 'plainpaste','image', 'table', 'hr', 'pagebreak','link', 'unlink',
+                    'preview'
+                ],
+                afterChange : function() {
+                    this.sync();
+                },
+                afterCreate: function () {
+                    var editerDoc = this.edit.doc;
+                    //监听粘贴事件, 包括右键粘贴和ctrl+v
+                    $(editerDoc).bind('paste', function (e) {
+                        var ele = e.originalEvent.clipboardData.items;
+                        //e.originalEvent.preventDefault();
+                        for (var i = 0; i < ele.length; ++i) {
+                            //复核类型进行处理
+                            if(ele[i].type==="text/html"){
+                              e.originalEvent.preventDefault();
+                              ele[i].getAsString(function(pstct){//data文件类型
+                                if(pstct.indexOf('data:image') !== -1){
+                                    editor.insertHtml(pstct.replace(/<\s?img[^>]*>/gi, ''));//复合text
+                                    var imgReg = /<img[^>]+>/g;
+                                    var srcReg = /src=[\'\"]?([^\'\"]*)[\'\"]?/i;
+                                    var arr = pstct.match(imgReg); 
+                                    for(var i=0;i<arr.length;i++){
+                                        var result=arr[i].match(srcReg)[1];
+                                        if(result.indexOf("data:image") !== -1 ){
+                                            var file = base64DataToImageFile(result);
+                                            ajaxUpload(file, editor)
+                                        }
+                                    } 
+                                }else{
+                                    editor.insertHtml(pstct);
+                                }
+                              });
+                            }
+                            if (ele[i].type.indexOf('image/') !== -1) {//文件类型
+                                e.originalEvent.preventDefault();
+                                var file = ele[i].getAsFile();
+                                ajaxUpload(file, editor);
+                            }
+                        }
+                    });
+                },                      
+                themeType : "primary", //主题
+                //错误处理 handler
+                errorMsgHandler : function(message, type) {
+                    try {
+                        JDialog.msg({type:type, content:message, timer:2000});
+                    } catch (Error) {
+                        alert(message);
+                    }
+                }
+            });
+          });
+          
+        function ajaxUpload(file, editor){
+            var formData = new FormData();
+            formData.append("imgFile", file); //name,value
+            //用jquery Ajax 上传二进制数据
+            $.ajax({
+                url: '/admin/attach/uploadImg',
+                type: 'POST',
+                data: formData,
+                // 告诉jQuery不要去处理发送的数据
+                processData: false,
+                contentType: false,
+                dataType: "json",
+                beforeSend: function () {
+                    //console.log("正在进行，请稍候");
+                },
+                success: function (responseStr) {
+                    var src = responseStr.url;
+                    var imgTag = "<img src='" + src + "' border='0'/>";
+                    editor.insertHtml(imgTag);
+                },
+                error: function (responseStr) {
+                    console.log("error");
+                }
+            });
+        }
+        
+        function base64DataToImageFile(dataurl){
+            var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+            while(n--){
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+            return new File([u8arr], "test.jpg", {type:mime});
+        }
+        /*]]>*/
+</script>
 <script th:src="@{/admin/plugins/md/js/jquery.scrollto.js}"></script>
-<script th:src="@{/admin/plugins/md/js/pagedown.js}"></script>
-<script th:src="@{/admin/plugins/md/js/pagedown-extra.js}"></script>
-<script th:src="@{/admin/plugins/md/js/diff.js}"></script>
-<!--<script th:src="@{/admin/plugins/md/js/md.js}"></script>-->
 
 <script th:src="@{//cdn.bootcss.com/jquery-toggles/2.0.4/toggles.min.js}"></script>
 <script th:src="@{//cdn.bootcss.com/jquery-validate/1.15.1/jquery.validate.min.js}"></script>
@@ -70,7 +170,7 @@
     // validate the comment form when it is submitted
     $('#articleForm').validate({
         submitHandler: function (form) {
-            $('#content-editor').val($('#text').val());
+            $('#content-editor').val($('#text').html());
             $("#articleForm #categories").val($('#multiple-sel').val());
             var params = $("#articleForm").serialize();
             var url = $('#articleForm #cid').val() != '' ? '/admin/page/modify' : '/admin/page/publish';
