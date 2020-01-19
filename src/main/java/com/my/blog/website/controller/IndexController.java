@@ -10,6 +10,7 @@ import com.my.blog.website.modal.Bo.ArchiveBo;
 import com.my.blog.website.modal.Bo.RestResponseBo;
 import com.my.blog.website.modal.Vo.CommentVo;
 import com.my.blog.website.modal.Vo.MetaVo;
+import com.my.blog.website.modal.Vo.UserVo;
 import com.my.blog.website.service.IMetaService;
 import com.my.blog.website.service.ISiteService;
 import com.my.blog.website.utils.PatternKit;
@@ -55,7 +56,6 @@ import java.util.List;
  */
 @Controller
 public class IndexController extends BaseController {
-	int i = 100000;
     private static final Logger LOGGER = LoggerFactory.getLogger(IndexController.class);
 
     @Resource
@@ -78,56 +78,6 @@ public class IndexController extends BaseController {
     @GetMapping(value = {"/", "index"})
     public String index(HttpServletRequest request, @RequestParam(value = "limit", defaultValue = "12") int limit) {
         return this.index(request, 1, limit);
-    }
-    
-    @PostMapping(value = "uploadImg")
-	@ResponseBody
-    public String uploadImg(HttpServletRequest request, @RequestParam("imgFile") MultipartFile zipFile) {
-    	String webRootPath=request.getServletContext().getRealPath("");
-//		JSONObject jo=new JSONObject(param);
-//		String binaryString = jo.getString("imgFile");
-		Date date=new Date();
-		String str = new SimpleDateFormat("yyyyMMddHHmmss").format(date);
-		String urlPath = "/uploads/image/"+str.substring(0,6)+"/"
-				+ str.substring(6,8) + "/" +str+"_" + i++ + ".jpg";
-		String path=webRootPath+urlPath;
-		
-//		ImageBinary.base64StringToImage(path, binaryString);
-		File targetFile = new File(path);
-		File fileParent = targetFile.getParentFile();  
-		if(!fileParent.exists()){  
-			fileParent.mkdirs();  
-		}  
-		try {
-			targetFile.createNewFile();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}  
-		try(FileOutputStream fileOutputStream = new FileOutputStream(targetFile)) {
-			IOUtils.copy(zipFile.getInputStream(), fileOutputStream);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		//{"thumbURL":"\/uploads\/image\/201912\/18\/20191218165027_79943.png","oriURL":"\/uploads\/image\/201912\/18\/20191218165027_79943.png","filesize":19974,"width":170,"height":138}
-		try(FileWriter fw = new FileWriter(webRootPath+new File("/php/default/db/data/image.db"),true);){
-			BufferedImage read = ImageIO.read(targetFile);
-			read.getData().getHeight();
-			;
-			JSONObject record = new JSONObject();
-			record.put("thumbURL", urlPath);
-			record.put("oriURL", urlPath);
-			record.put("filesize", targetFile.length());
-			record.put("width", read.getData().getWidth());
-			record.put("height", read.getData().getHeight());
-			fw.write(record.toString()+"\n");
-			fw.flush();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		JSONObject res = new JSONObject();
-		res.put("url", urlPath);
-    	return res.toString();
     }
 
     /**
