@@ -25,9 +25,8 @@
                             <input type="hidden" name="categories" id="categories"/>
                             <input type="hidden" name="cid" th:value="${contents!=null and contents.cid!=null}?${contents.cid}: ''" id="cid"/>
                             <input type="hidden" name="status" th:value="${contents!=null and contents.status !=null}?${contents.status}: 'publish'" id="status"/>
-                            <input type="hidden" name="allowComment" value="true" id="allowComment"/>
-                            <input type="hidden" name="allowPing" value="true" id="allowPing"/>
-                            <input type="hidden" name="allowFeed" value="true" id="allowFeed"/>
+                            <input type="hidden" name="allowComment" value="1" id="allowComment"/>
+                            <input type="hidden" name="allowPing" value="1" id="allowPing"/>
                             <input type="hidden" name="content" id="content-editor"/>
 
                             <div class="form-group">
@@ -198,14 +197,6 @@
             });
         }
     });
-
-<!--
-    var textarea = $('#text'),
-        toolbar = $('<div class="markdown-editor" id="md-button-bar" />').insertBefore(textarea.parent())
-    preview = $('<div id="md-preview" class="md-hidetab" />').insertAfter('.markdown-editor');
-
-    markdown(textarea, toolbar, preview);
--->
     /*]]>*/
 </script>
 
