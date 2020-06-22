@@ -24,7 +24,8 @@ service enable vsftpd
 
 7. php-fpm(nginx php支持)
 vi /etc/php-fpm.d/www.conf
-service php-fpm restart
+#service php-fpm restart
+./usr/local/sbin/php-fpm
 
 网站(不分先后)
 photo
