@@ -1,0 +1,48 @@
+#!/bin/bash
+# chkconfig: 2345 10 90
+# description: Starts and Stops the Tomcat daemon.
+# processname: tomcat
+TOMCAT_HOME=/usr/tomcat
+TOMCAT_START=$TOMCAT_HOME/bin/startup.sh
+TOMCAT_STOP=$TOMCAT_HOME/bin/shutdown.sh
+# necessary environment variables export
+CATALINA_HOME=$TOMCAT_HOME
+export JAVA_HOME=/usr/local/jdk18
+# source function library.
+. /etc/rc.d/init.d/functions
+if [ ! -f $TOMCAT_HOME/bin/catalina.sh ]
+then echo "Tomcat not valilable..."
+exit
+fi
+start(){
+echo -n "Starting Tomcat: "
+daemon $TOMCAT_START
+echo
+touch /var/lock/subsys/tomcat
+}
+stop(){
+echo -n "Shutting down Tomcat: "
+daemon $TOMCAT_STOP
+rm -f /var/lock/subsys/tomcat.pid echo
+}
+restart(){
+stop
+start
+}
+
+case "$1" in
+start)
+start ;;
+stop)
+stop ;;
+restart)
+stop
+sleep 3
+start ;;
+status)
+status tomcat ;;
+*)
+echo "Usage: tomcatd {start|stop|restart|status}"
+exit 1
+esac
+exit 0
