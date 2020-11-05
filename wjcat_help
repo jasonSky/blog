@@ -1,0 +1,31 @@
+python3 manage.py createsuperuser
+1. cd wjcatAdmin   python3 manage.py runserver 127.0.0.1:8000   默认8000端口
+nohup python3 manage.py runserver &
+
+2. cd wjcat   修改vue配置(后端，前端端口域名等)  npm run dev直接指定端口运行
+npm run build + nginx配置即可
+server {
+        listen 443;
+        server_name survery.jasonsky.com.cn;
+
+        root /opt/wjcat-release/wjcat/dist;
+
+        location / {
+            try_files $uri $uri/ @router;#需要指向下面的@router否则会出现vue的路由在nginx中刷新出
+现404
+            index  index.html index.htm;
+        }
+
+        location /api/ {
+            proxy_pass http://localhost:8000;
+            proxy_set_header Host $host;
+            proxy_set_header REMOTE_ADDR $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+
+        location @router {
+            rewrite ^.*$ /index.html last;
+        }
+    }
+
+
